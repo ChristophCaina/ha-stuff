@@ -1,0 +1,7 @@
+alias: Info Abfall-Kalender (Wertstoff)
+sequence:
+  - service: notify.alexa_media_last_called
+    data:
+      message: Wertstoffe werden am {{ states('sensor.wertstoffe_date') }} abgeholt
+mode: single
+icon: mdi:trash-can-outline
