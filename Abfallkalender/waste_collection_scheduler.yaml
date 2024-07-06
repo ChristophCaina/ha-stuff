@@ -1,0 +1,14 @@
+  sources:
+    - name: abfall_io
+      args:
+        key: "********"         # removed key
+        f_id_kommune: ****      # removed kommune
+        f_id_bezirk: ****       # removed bezirk      
+        f_id_strasse: ****      # removed straße
+        f_abfallarten:
+          - 50
+          - 53
+          - 31
+          - 299
+  fetch_time: "02:00"
+  day_switch_time: "15:00"
