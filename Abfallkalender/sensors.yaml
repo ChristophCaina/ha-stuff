@@ -1,0 +1,40 @@
+# Waste Collection Scheduler
+- platform: waste_collection_schedule
+  source_index: 0
+  name: Abfallkalender
+  details_format: upcoming
+  count: 5
+  leadtime: 3
+  value_template: '{{value.types|join(" + ")}} wird {% if value.daysTo == 0 %}Heute{% elif value.daysTo == 1 %}Morgen{% else %}in {{value.daysTo}} Tagen{% endif %} abgeholt!'
+
+  # RESTMÜLL
+- platform: waste_collection_schedule
+  name: restmuell_date
+  details_format: appointment_types
+  value_template: '{{value.date.strftime("%d.%m.%Y")}}'
+  types:
+    - Restmüll 120l/240l
+
+  # PAPIERMÜLL
+- platform: waste_collection_schedule
+  name: papier_date
+  details_format: appointment_types
+  value_template: '{{value.date.strftime("%d.%m.%Y")}}'
+  types:
+    - Papier 120l/240l
+
+  # BIOMÜLL
+- platform: waste_collection_schedule
+  name: biomuell_date
+  details_format: appointment_types
+  value_template: '{{value.date.strftime("%d.%m.%Y")}}'
+  types:
+    - Biomüll
+  
+  # WERTSTOFFE
+- platform: waste_collection_schedule
+  name: wertstoffe_date
+  details_format: appointment_types
+  value_template: '{{value.date.strftime("%d.%m.%Y")}}'
+  types:
+    - Wertstoffe
