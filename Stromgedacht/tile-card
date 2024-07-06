@@ -1,0 +1,22 @@
+type: tile
+entity: sensor.stromgedacht_status
+icon: mdi:transmission-tower
+show_entity_picture: false
+vertical: false
+name: ' '
+layout_options:
+  grid_columns: 4
+  grid_rows: 1
+card_mod:
+  style: |
+    ha-card {
+      {% if is_state_attr(config.entity, 'state', -1) %}
+        --tile-color:var(--lime-color) !important;
+      {% elif is_state_attr(config.entity, 'state', 1) %}
+        --tile-color:var(--green-color) !important;
+      {% elif is_state_attr(config.entity, 'state', 3) %}  
+        --tile-color:var(--orange-color) !important;
+      {% elif is_state_attr(config.entity, 'state', 4) %}  
+        --tile-color:var(--red-color) !important;
+      {% endif %}  
+    }
