@@ -1,0 +1,7 @@
+alias: Info Abfall-Kalender (Restmüll)
+sequence:
+  - service: notify.alexa_media_last_called
+    data:
+      message: Restmüll wird am {{ states('sensor.restmuell_date') }} abgeholt
+mode: single
+icon: mdi:trash-can-outline
