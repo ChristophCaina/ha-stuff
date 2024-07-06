@@ -1,0 +1,34 @@
+# The Door / Window Handle sensor cannot be used as security related device, because it does not create binary sensors, since it supports three different states.
+# the supported states are Closed, Open, Tilted - which is typical for german windows and garden-doors.
+# to integrate this sensor f.e. in an alarm system (alarmo, etc.) you need to provide a binary sensor.
+# this template will create the binary sensor - where tilted == open.
+# in addition, the state of the source sensor will be used as attribute, so it can still be displayed as secondary information.
+
+# Window Handle Open / Closed state
+- binary_sensor:
+    - name: "Fenstergriff WC"
+      unique_id: "fenstergriff_wc"
+      icon: >
+        {% if is_state('sensor.fenstergriffsensor_wc_state', 'closed') %}
+          mdi:window-closed
+        {% elif states('sensor.fenstergriffsensor_wc_state') in ['open', 'tilted'] %}
+          mdi:window-open
+        {% endif %}
+      device_class: window
+      state: >
+        {% if is_state('sensor.fenstergriffsensor_wc_state', 'closed') %}
+          off
+        {% elif states('sensor.fenstergriffsensor_wc_state') in ['open', 'tilted'] %}
+          on
+        {% endif %}
+      availability: >
+        {{ states('sensor.fenstergriffsensor_wc_state') not in ['unknown', 'unavailable', 'None'] }}
+      attributes:
+        device_state: >
+          {% if is_state('sensor.fenstergriffsensor_wc_state', 'closed') %}
+            Geschlossen
+          {% elif is_state('sensor.fenstergriffsensor_wc_state', 'tilted') %}
+            Gekippt
+          {% elif is_state('sensor.fenstergriffsensor_wc_state', 'open') %}
+            Offen
+          {% endif %}
