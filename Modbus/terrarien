@@ -1,0 +1,144 @@
+# Terrarium T1 Oscar
+  - name: "Terrarium Oscar"
+    type: tcp
+    host: 192.168.***.***
+    port: 503
+
+    # (NI / NQ 0.x => 0-7)
+    lights:
+      - name: "Tageslicht (t1)"
+        unique_id: "t1_ni1"
+        address: 0
+        write_type: coil
+        command_on: 1
+        command_off: 0
+        scan_interval: 5
+        verify:
+            input_type: coil
+            address: 8192
+            state_on: 1
+            state_off: 0
+      
+      - name: "Wärme (t1)"
+        unique_id: "t1_ni2"
+        address: 1
+        write_type: coil
+        command_on: 1
+        command_off: 0
+        scan_interval: 5
+        verify:
+            input_type: coil
+            address: 8193
+            state_on: 1
+            state_off: 0
+    
+    switches:
+      - name: "Bewässerung (t1)"
+        unique_id: "t1_ni3"
+        address: 2
+        write_type: coil
+        command_on: 1
+        command_off: 0
+        scan_interval: 5
+        verify:
+            input_type: coil
+            address: 8194
+            state_on: 1
+            state_off: 0
+
+      - name: "Automatik Bypass (t1)"
+        unique_id: "t1_ni4"
+        address: 3
+        write_type: coil
+        command_on: 1
+        command_off: 0
+        scan_interval: 5
+        verify:
+          input_type: coil
+          address: 8195
+          state_on: 1
+          state_off: 0
+
+      - name: "Reset Betriebsstundenzähler (t1)"
+        unique_id: "t1_ni5"
+        address: 5
+        write_type: coil
+        command_on: 1
+        command_off: 0
+        scan_interval: 5
+
+    binary_sensors:
+      - name: Betriebsstundenzähler (t1)
+        unique_id: "t1_nq1"
+        address: 4
+        input_type: coil
+        scan_interval: 10
+        device_class: problem
+
+    sensors:
+      - name: Temperatur (t1) # AM 2
+        unique_id: "t1_am2"
+        address: 529
+        input_type: holding
+        unit_of_measurement: °C
+        device_class: temperature
+        state_class: measurement
+        scan_interval: 30
+        scale: 0.1
+        precision: 1
+
+      - name: Luftfeuchtigkeit (t1) # AM 1
+        unique_id: "t1_am1"
+        address: 528
+        input_type: holding
+        unit_of_measurement: "%"
+        device_class: humidity
+        state_class: measurement
+        scan_interval: 30
+        scale: 0.1
+        precision: 1
+
+      - name: Sonnenaufgang (t1)
+        unique_id: "t1_sunrise"
+        address: 1
+        input_type: holding
+        scan_interval: 10
+
+      - name: Sonnenuntergang (t1)
+        unique_id: "t1_sunset"
+        address: 2
+        input_type: holding
+        scan_interval: 10
+
+      - name: Betriebsstundenzähler (t1 - mn)
+        unique_id: "t1_betriebsstundenzähler_mn"
+        data_type: custom
+        structure: ">L"
+        address: 3
+        count: 2
+        input_type: holding
+        scan_interval: 10
+        unit_of_measurement: min
+        device_class: duration
+
+      - name: Betriebsstundenzähler (t1 - ot)
+        unique_id: "t1_betriebsstundenzähler_ot"
+        data_type: custom
+        structure: ">L"
+        address: 5
+        count: 2
+        input_type: holding
+        scan_interval: 10
+        unit_of_measurement: min
+        device_class: duration
+
+      - name: Betriebsstundenzähler (t1 - mi)
+        unique_id: "t1_betriebsstundenzähler_mi"
+        data_type: custom
+        structure: ">L"
+        address: 7
+        count: 2
+        input_type: holding
+        scan_interval: 10
+        unit_of_measurement: min
+        device_class: duration
