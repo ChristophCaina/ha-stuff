@@ -1,0 +1,7 @@
+alias: Info Abfall-Kalender (Bio-Abfall)
+sequence:
+  - service: notify.alexa_media_last_called
+    data:
+      message: Bio-Müll wird am {{ states('sensor.biomuell_date') }} abgeholt
+mode: single
+icon: mdi:trash-can-outline
