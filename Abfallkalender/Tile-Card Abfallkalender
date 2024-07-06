@@ -1,0 +1,22 @@
+type: tile
+entity: sensor.abfallkalender
+vertical: false
+show_entity_picture: false
+icon: ''
+hide_state: false
+name: ' '
+layout_options:
+  grid_columns: 4
+  grid_rows: 1
+card_mod:
+  style: |
+    ha-card {
+      {% if 'Restmüll' in states('sensor.abfallkalender') %}
+        --tile-color:var(--black-color) !important;
+      {% elif 'Papier' in states('sensor.abfallkalender') %}
+        --tile-color:var(--blue-color) !important;
+      {% elif 'Wertstoffe' in states('sensor.abfallkalender') %}
+        --tile-color:var(--orange-color) !important;
+      {% elif 'Biomüll' in states('sensor.abfallkalender') %}
+        --tile-color:var(--brown-color) !important;
+      {% endif %}
