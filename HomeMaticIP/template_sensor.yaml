@@ -1,0 +1,64 @@
+# creates a binary sensor from a hmip smoke-detectors (used via Homematic(IP) local custom integration
+# since the smoke-detector is not a binary sensor within this custom integration, HomeAssistant will not recognize it as a Security related device.
+# therefore, I created this template - it will use the alarm type (primary => smoke detected by the device, secondary => smoke detected by a different device) as attribtue.
+
+# Arbeitszimmer
+#Smoke Detector Alarm
+- binary_sensor:
+    - name: "Rauchwarnmelder Arbeitszimmer"
+      unique_id: "rauchwarnmelder_arbeitszimmer"
+      icon: >
+        {% if states('sensor.rauchwarnmelder_arbeitszimmer_smoke_detector_alarm_status') in ['idle_off', 'intrusion_alarm'] %}
+          mdi:smoke-detector-variant
+        {% elif states('sensor.rauchwarnmelder_arbeitszimmer_smoke_detector_alarm_status') in ['primary_alarm','secondary_alarm'] %}
+          mdi:smoke-detector-variant-alert
+        {% endif %}
+      device_class: smoke
+      state: >
+        {% if states('sensor.rauchwarnmelder_arbeitszimmer_smoke_detector_alarm_status') in ['idle_off', 'intrusion_alarm'] %}
+          off
+        {% elif states('sensor.rauchwarnmelder_arbeitszimmer_smoke_detector_alarm_status') in ['primary_alarm', 'secondary_alarm'] %}
+          on
+        {% endif %}
+      availability: >
+        {{ states('sensor.rauchwarnmelder_arbeitszimmer_smoke_detector_alarm_status') not in ['unknown', 'unavailable', 'None'] }}
+      attributes:
+        device_state: >
+          {% if is_state('sensor.rauchwarnmelder_arbeitszimmer_smoke_detector_alarm_status', 'idle_off') %}
+            Untätig
+          {% elif is_state('sensor.rauchwarnmelder_arbeitszimmer_smoke_detector_alarm_status', 'primary_alarm') %}
+            Primärer Alarm - Rauch erkannt!
+          {% elif is_state('sensor.rauchwarnmelder_arbeitszimmer_smoke_detector_alarm_status', 'secondary_alarm') %}
+            Sekundärer Alarm - durch anderen Rauchmelder ausgelöst
+          {% endif %}
+
+
+# creates a binary sensor from a hmip smoke-detectors (used via Homematic(IP) local custom integration
+# since the smoke-detector from Homematic(IP) can also be used as an Intrusion Alarm device, this binary sensor will create a dedicated sensor which will be triggered only, when the intrusion alarm goes on.
+
+# Intrusion Alarm Device
+- binary_sensor:
+    - name: "Einbruchsalarm Arbeitszimmer"
+      unique_id: "intrusion_alarm_arbeitszimmer"
+      icon: >
+        {% if states('sensor.rauchwarnmelder_arbeitszimmer_smoke_detector_alarm_status') in ['idle_off', 'secondary_alarm', 'primary_alarm'] %}
+          mdi:shield
+        {% elif is_state("sensor.rauchwarnmelder_arbeitszimmer_smoke_detector_alarm_status", "intrusion_alarm") %}
+          mdi:shield-alert
+        {% endif %}
+      device_class: tamper
+      state: >
+        {% if states('sensor.rauchwarnmelder_arbeitszimmer_smoke_detector_alarm_status') in ['idle_off', 'secondary_alarm', 'primary_alarm'] %}
+          off
+        {% elif is_state('sensor.rauchwarnmelder_arbeitszimmer_smoke_detector_alarm_status', 'intrusion_alarm') %}
+          on
+        {% endif %}
+      availability: >
+        {{ states('sensor.rauchwarnmelder_arbeitszimmer_smoke_detector_alarm_status') not in ['unknown', 'unavailable', 'None'] }}
+      attributes:
+        device_state: >
+          {% if is_state('sensor.rauchwarnmelder_arbeitszimmer_smoke_detector_alarm_status', 'idle_off') %}
+            Untätig
+          {% elif is_state('sensor.rauchwarnmelder_arbeitszimmer_smoke_detector_alarm_status', 'intrusion_alarm') %}
+            Einbruch erkannt!
+          {% endif %}
