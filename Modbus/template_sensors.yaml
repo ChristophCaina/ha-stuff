@@ -1,0 +1,16 @@
+# terrarium 1
+- sensor:
+    - name: Sonnenaufgang
+      unique_id: "t1_sunrise_timestamp"
+      device_class: timestamp
+      state: >
+        {% set x = ('%04x' % states('sensor.sonnenaufgang_t1')|int(0)) %}
+        {{ today_at('%s:%s' % (x[:2],x[-2:])) }}
+
+- sensor:
+    - name: Sonnenuntergang
+      unique_id: "t1_sunset_timestamp"
+      device_class: timestamp
+      state: >
+        {% set x = ('%04x' % states('sensor.sonnenuntergang_t1')|int(0)) %}
+        {{ today_at('%s:%s' % (x[:2],x[-2:])) }}
