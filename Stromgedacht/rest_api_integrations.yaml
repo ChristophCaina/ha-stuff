@@ -1,0 +1,52 @@
+# replace zip=12345 with your zip code
+
+- resource_template: "https://api.stromgedacht.de/v1/forecast?zip=12345&from={{ now().strftime('%Y-%m-%d') }}"
+  scan_interval: 3600
+  sensor:    
+  - value_template: '{{ value_json.residualLoad | selectattr("dateTime", ">=", (utcnow() - timedelta(minutes=15)).strftime("%Y-%m-%dT%H:%M:%SZ")) | map(attribute="value") | first }}'
+    name: "API Stromgedacht Residuallast"
+    unit_of_measurement: "MW"
+    device_class: power
+    state_class: measurement
+    unique_id: "API_Stromgedacht_Residuallast"
+    json_attributes: "residualLoad" 
+
+  - value_template: '{{ value_json.load | selectattr("dateTime", ">=", (utcnow() - timedelta(minutes=15)).strftime("%Y-%m-%dT%H:%M:%SZ")) | map(attribute="value") | first }}'
+    name: "API Stromgedacht Last"
+    unit_of_measurement: "MW"
+    device_class: power
+    state_class: measurement
+    unique_id: "API_Stromgedacht_Last"
+    json_attributes: "load" 
+
+  - value_template: '{{ value_json.renewableEnergy | selectattr("dateTime", ">=", (utcnow() - timedelta(minutes=15)).strftime("%Y-%m-%dT%H:%M:%SZ")) | map(attribute="value") | first }}'
+    name: "API Stromgedacht Erneuerbar"
+    unit_of_measurement: "MW"
+    device_class: power
+    state_class: measurement
+    unique_id: "API_Stromgedacht_RenewableEnergy"
+    json_attributes: "renewableEnergy" 
+
+  - value_template: '{{ value_json.superGreenThreshold | selectattr("dateTime", ">=", (utcnow() - timedelta(minutes=15)).strftime("%Y-%m-%dT%H:%M:%SZ")) | map(attribute="value") | first }}'
+    name: "API Stromgedacht SuperGrün Schwelle"
+    unit_of_measurement: "MW"
+    device_class: power
+    state_class: measurement
+    unique_id: "API_Stromgedacht_superGreenThreshold"
+    json_attributes: "superGreenThreshold"
+
+# Stromgedacht Status
+- resource: https://api.stromgedacht.de/v1/now?zip=12345
+  sensor:
+  - name: Stromgedacht Status
+    json_attributes: 
+      - state
+    value_template: >
+      {% set mapper = {
+          -1: "Strom bevorzugt nutzen",
+          1: "Stom normal nutzen",
+          3: "Stromverbrauch verlagern",
+          4: "Stromverbrauch reduzieren",
+      } %}
+      {% set state = value_json.state %}
+      {{ mapper[state] if state in mapper else state }}
