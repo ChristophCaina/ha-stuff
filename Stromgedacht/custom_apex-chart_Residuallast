@@ -1,0 +1,26 @@
+type: custom:apexcharts-card
+header:
+  show: true
+graph_span: 48h
+span:
+  start: day
+now:
+  show: true
+  label: Now
+series:
+  - entity: sensor.api_stromgedacht_residuallast
+    color: red
+    type: line
+    stroke_width: 3
+    extend_to: now
+    data_generator: >
+      return entity.attributes.residualLoad.map((entry, index) => { return [new
+      Date(entry.dateTime).getTime(), entry.value]; });
+  - entity: sensor.api_stromgedacht_supergrun_schwelle
+    color: lightgreen
+    type: line
+    stroke_width: 3
+    extend_to: now
+    data_generator: >
+      return entity.attributes.superGreenThreshold.map((entry, index) => {
+      return [new Date(entry.dateTime).getTime(), entry.value]; });
